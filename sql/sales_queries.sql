@@ -1,59 +1,37 @@
-CREATE TABLE sales (
-    transaction_id INT PRIMARY KEY,
-    date DATE,
-    customer_id INT,
-    gender VARCHAR(10),
-    age INT,
-    product_category VARCHAR(100),
-    quantity INT,
-    price_per_unit DECIMAL(10,2),
-    total_amount DECIMAL(10,2)
-);
+-- ===============================
+-- SQL DATA ANALYSIS PRACTICE
+-- Author: Vera Nhema Kinya
+-- ===============================
 
-STEP 1: Basic Data Check
-View First Rows:
-SELECT *
-FROM sales
-LIMIT 10;
+-- 1️⃣ Total number of orders per customer
+-- Business Question:
+-- Which customers place the most orders?
 
-Check Total Records:
-SELECT COUNT(*) AS total_rows
-FROM sales;
+SELECT
+    customer_id,
+    COUNT(order_id) AS total_orders
+FROM orders
+GROUP BY customer_id
+ORDER BY total_orders DESC;
 
-STEP 2: Revenue Analysis
-Total Revenue:
-SELECT SUM("total_amount") AS total_revenue
-FROM sales;
 
-Total Transactions:
-SELECT COUNT("transaction_id") AS total_transactions
-FROM sales;
+-- 2️⃣ Top-selling products by revenue
+-- Business Question:
+-- Which products generate the highest revenue?
 
-Average Order Value:
-SELECT 
-    SUM("total_amount") / COUNT("transaction_id") AS avg_order_value
-FROM sales;
-
-STEP 3: Sales by Category
-SELECT 
-    "product_category",
-    SUM("total_amount") AS total_revenue
-FROM sales
-GROUP BY "product_category"
+SELECT
+    p.product_name,
+    SUM(o.quantity * p.price) AS total_revenue
+FROM orders o
+JOIN products p
+    ON o.product_id = p.product_id
+GROUP BY p.product_name
 ORDER BY total_revenue DESC;
 
-STEP 4: Sales by Gender
-SELECT 
-    gender,
-    SUM("total_amount") AS total_revenue
-FROM sales
-GROUP BY gender
-ORDER BY total_revenue DESC;
 
-STEP 5: Monthly Sales Trend
-SELECT 
-    TO_CHAR(Date, 'YYYY-MM') AS month,
-    SUM("total_amount") AS total_revenue
-FROM sales
-GROUP BY month
-ORDER BY month;
+-- 3️⃣ Overall order volume
+-- Business Question:
+-- How many orders exist in total?
+
+SELECT COUNT(*) AS total_orders
+FROM orders;
