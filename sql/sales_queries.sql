@@ -1,11 +1,17 @@
--- ===============================
--- SQL DATA ANALYSIS PRACTICE
+-- =====================================================
+-- SQL Data Analysis Practice
 -- Author: Vera Nhema Kinya
--- ===============================
+-- Description:
+-- This file contains SQL queries used to answer common
+-- business questions using relational data.
 
--- 1️⃣ Total number of orders per customer
+-- =====================================================
 -- Business Question:
--- Which customers place the most orders?
+-- How many orders has each customer placed?
+-- =====================================================
+
+-- Purpose:
+-- Identify customer activity levels and engagement
 
 SELECT
     customer_id,
@@ -14,24 +20,25 @@ FROM orders
 GROUP BY customer_id
 ORDER BY total_orders DESC;
 
-
--- 2️⃣ Top-selling products by revenue
+-- =====================================================
 -- Business Question:
 -- Which products generate the highest revenue?
+-- =====================================================
+
+-- Purpose:
+-- Support product performance analysis and prioritization
 
 SELECT
-    p.product_name,
-    SUM(o.quantity * p.price) AS total_revenue
-FROM orders o
-JOIN products p
-    ON o.product_id = p.product_id
-GROUP BY p.product_name
+    product_id,
+    SUM(quantity * price) AS total_revenue
+FROM order_items
+GROUP BY product_id
 ORDER BY total_revenue DESC;
 
-
--- 3️⃣ Overall order volume
+-- =====================================================
 -- Business Question:
 -- How many orders exist in total?
+-- =====================================================
 
 SELECT COUNT(*) AS total_orders
 FROM orders;
